@@ -1,0 +1,37 @@
+.outside {
+    width: 1920px;
+    height: 1080px;
+    background-color: transparent;
+    text-align: center;
+  }
+  
+  .inside {
+    background-color: transparent;
+    line-height: 180px;
+  }
+  
+.center {
+    display: block;
+    margin-left:auto;
+    margin-right: auto;
+    width: 80%;
+  }
+.button {
+    background-color: transparent;
+    border: none;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 100px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+img{
+    width: 70%;
+}
+body{
+    background-image: url("restart.png") ; 
+    background-size: cover;
+    
+}
