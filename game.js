@@ -7,7 +7,7 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 300 },
+            gravity: { y: 400 },
             debug: false
         }
     },
@@ -24,7 +24,7 @@ let player;
 let platforms;
 let cursors;
 let spacebar;
-let wasd;
+let wad;
 
 function preload() {
     this.load.image('sky', 'assetid/sky.png');
@@ -41,11 +41,11 @@ function create() {
     platforms = this.physics.add.staticGroup();
 
     // Create platforms
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 12; i++) {
         let x, y, platform, overlap;
         do {
             x = Phaser.Math.Between(0, 400);
-            y = Phaser.Math.Between(0, 700);
+            y = Phaser.Math.Between(100, 700);
             platform = platforms.create(x, y, 'platform').setScale(0.2).refreshBody();
             platform.body.setSize(platform.displayWidth * 0.2, platform.displayHeight * 0.2);
             platform.body.setOffset((platform.displayWidth - platform.body.width) / 2, (platform.displayHeight - platform.body.height) / 2);
@@ -65,27 +65,72 @@ function create() {
     player.setScale(0.1); // Scale down the cat sprite
     player.setCollideWorldBounds(true);
 
-    this.physics.add.collider(player, platforms)
+    this.physics.add.collider(player, platforms, (player, platform) => {
+        // Exclude bottom ground from custom collision logic
+        if (platform === bottomGround) {
+            return;
+        }
+        checkCollision(player, platform);
+    });
 
-    wasd = this.input.keyboard.addKeys({
+    wad = this.input.keyboard.addKeys({
         up: Phaser.Input.Keyboard.KeyCodes.W,
         left: Phaser.Input.Keyboard.KeyCodes.A,
-        down: Phaser.Input.Keyboard.KeyCodes.S,
         right: Phaser.Input.Keyboard.KeyCodes.D
     });
     spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 }
 
-function update() {
-    if (wasd.left.isDown) {
-        player.setVelocityX(-160);
-    } else if (wasd.right.isDown) {
-        player.setVelocityX(160);
+function checkCollision(player, platform) {  
+    if (player.body.bottom < platform.body.bottom) {
+        // Enable collision if the player is above the platform
+        platform.body.checkCollision.up = true;
+        platform.body.checkCollision.down = true;
+        platform.body.checkCollision.right = true
+        platform.body.checkCollision.left = true
     } else {
-        player.setVelocityX(0);
+        // Disable collision if the player is below the platform
+        platform.body.checkCollision.up = false;
+        platform.body.checkCollision.down = false;
+        platform.body.checkCollision.right = false
+        platform.body.checkCollision.left = false
+    }
+}
+
+let jumpCount = 0;
+const maxJumps = 2;
+
+function update() {
+    if (wad.left.isDown) {
+        player.setVelocityX(-160);
+    } else if (wad.right.isDown) {
+        player.setVelocityX(160);
+    }
+    else {
+    player.setVelocityX(0);
     }
 
-    if ((wasd.up.isDown || spacebar.isDown) && player.body.touching.down) {
-        player.setVelocityY(-330);
+    if ((wad.up.isDown || spacebar.isDown) && player.body.touching.down) {
+        player.setVelocityY(-400);
+    }
+
+
+    platforms.children.iterate(function (platform, bottomGround) {
+        if (platform !== bottomGround) {
+            checkCollision(player, platform);
+        }
+    });
+
+    this.physics.overlap(player, platforms, function (player, platform) {
+        touchingPlatform = true;
+        // Lõhu platform 1.2 sec peale overlappi
+        this.time.delayedCall(1200, () => {
+            platform.destroy();
+        });
+    }, null, this);
+
+    // Reset touchingPlatform flag if player is not touching any platform
+    if (!this.physics.overlap(player, platforms)) {
+        touchingPlatform = false;
     }
 }
