@@ -1,0 +1,51 @@
+/* General Reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('sky.png') no-repeat center center fixed; /* Add your image path here */
+    background-size: cover;
+}
+
+/* Container Styling */
+.game-over-container {
+    text-align: center;
+    background-color: #fff8dc;
+    border: 2px solid #ffcc99;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Heading Styling */
+.game-over-container h1 {
+    font-size: 2.5em;
+    color: #ff6f61;
+}
+
+/* Paragraph Styling */
+.game-over-container p {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Button Styling */
+.game-over-container button {
+    font-size: 1.1em;
+    color: #fff;
+    background-color: #ff6f61;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.game-over-container button:hover {
+    background-color: #e65c50;
+}
