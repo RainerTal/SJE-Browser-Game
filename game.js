@@ -7,7 +7,7 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 400 },
+            gravity: { y: 500 },
             debug: false
         }
     },
@@ -25,6 +25,8 @@ let platforms;
 let cursors;
 let spacebar;
 let wad;
+let score = 0;
+let scoreText;
 
 function preload() {
     this.load.image('sky', 'assetid/sky.png');
@@ -41,11 +43,28 @@ function create() {
     platforms = this.physics.add.staticGroup();
 
     // Create platforms
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 6; i++) {
         let x, y, platform, overlap;
         do {
             x = Phaser.Math.Between(0, 400);
-            y = Phaser.Math.Between(100, 700);
+            y = Phaser.Math.Between(400, 700);
+            platform = platforms.create(x, y, 'platform').setScale(0.2).refreshBody();
+            platform.body.setSize(platform.displayWidth * 0.2, platform.displayHeight * 0.2);
+            platform.body.setOffset((platform.displayWidth - platform.body.width) / 2, (platform.displayHeight - platform.body.height) / 2);
+
+            // Check for overlap with existing platforms
+            overlap = this.physics.overlap(platform, platforms);
+            if (overlap) {
+                platform.destroy(); // Destroy the platform if it overlaps
+            }
+        } while (overlap);
+    }
+
+    for (let i = 0; i < 6; i++) {
+        let x, y, platform, overlap;
+        do {
+            x = Phaser.Math.Between(0, 400);
+            y = Phaser.Math.Between(100, 400);
             platform = platforms.create(x, y, 'platform').setScale(0.2).refreshBody();
             platform.body.setSize(platform.displayWidth * 0.2, platform.displayHeight * 0.2);
             platform.body.setOffset((platform.displayWidth - platform.body.width) / 2, (platform.displayHeight - platform.body.height) / 2);
@@ -61,7 +80,7 @@ function create() {
     const bottomGround = platforms.create(400, this.sys.game.config.height, 'ground').setScale(1.5, 0.2).refreshBody();
     bottomGround.y -= bottomGround.displayHeight / 2; // Adjust position to be at the bottom
 
-    player = this.physics.add.sprite(400, bottomGround.y - 40, 'cat');
+    player = this.physics.add.sprite(200, bottomGround.y - 40, 'cat');
     player.setScale(0.1); // Scale down the cat sprite
     player.setCollideWorldBounds(true);
 
@@ -86,19 +105,20 @@ function checkCollision(player, platform) {
         // Enable collision if the player is above the platform
         platform.body.checkCollision.up = true;
         platform.body.checkCollision.down = true;
-        platform.body.checkCollision.right = true
-        platform.body.checkCollision.left = true
+        platform.body.checkCollision.right = true;
+        platform.body.checkCollision.left = true;
     } else {
         // Disable collision if the player is below the platform
         platform.body.checkCollision.up = false;
         platform.body.checkCollision.down = false;
-        platform.body.checkCollision.right = false
-        platform.body.checkCollision.left = false
+        platform.body.checkCollision.right = false;
+        platform.body.checkCollision.left = false;
     }
 }
 
-let jumpCount = 0;
-const maxJumps = 2;
+function resetGame() {
+    this.scene.restart();
+}
 
 function update() {
     if (wad.left.isDown) {
@@ -111,7 +131,7 @@ function update() {
     }
 
     if ((wad.up.isDown || spacebar.isDown) && player.body.touching.down) {
-        player.setVelocityY(-400);
+        player.setVelocityY(-450);
     }
 
 
@@ -132,5 +152,11 @@ function update() {
     // Reset touchingPlatform flag if player is not touching any platform
     if (!this.physics.overlap(player, platforms)) {
         touchingPlatform = false;
+    }
+
+    if (player.y <= 40) {
+        score += 1;
+        document.getElementById('score').innerText = score;
+        resetGame.call(this);
     }
 }

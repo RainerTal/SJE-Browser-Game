@@ -6,3 +6,12 @@ body {
     height: 100vh;
     background-color: #f0f0f0;
 }
+
+#score-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: #000;
+}
+
