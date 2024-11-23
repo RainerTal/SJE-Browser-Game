@@ -27,6 +27,19 @@ let spacebar;
 let wad;
 let score = 0;
 let scoreText;
+let playerTouchingBottom = true;
+let high_score = getCookie('high_score') ? parseInt(getCookie('high_score')) : 0;
+let platvormid = 8;
+
+document.addEventListener('DOMContentLoaded', () => {
+    highScore = getCookie('high_score') ? parseInt(getCookie('high_score')) : 0;
+    document.getElementById('high_score').innerText = highScore;
+
+    document.getElementById('clear-high_score').addEventListener('click', () => {
+        clearHighScore();
+    });
+});
+
 
 function preload() {
     this.load.image('sky', 'assetid/sky.png');
@@ -42,20 +55,27 @@ function create() {
 
     platforms = this.physics.add.staticGroup();
 
-    // Create platforms
-    for (let i = 0; i < 6; i++) {
+    if (score > 3) {
+        platvormid = 6;
+    }
+
+    if (score > 10) {
+        platvormid = 5;
+    }
+    // Loo platvormid
+    for (let i = 0; i < platvormid; i++) {
         let x, y, platform, overlap;
         do {
             x = Phaser.Math.Between(0, 400);
-            y = Phaser.Math.Between(400, 700);
+            y = Phaser.Math.Between(400, 700); // Vhaemikus Y(400, 700) ehk alumised platvormid
             platform = platforms.create(x, y, 'platform').setScale(0.2).refreshBody();
             platform.body.setSize(platform.displayWidth * 0.2, platform.displayHeight * 0.2);
             platform.body.setOffset((platform.displayWidth - platform.body.width) / 2, (platform.displayHeight - platform.body.height) / 2);
 
-            // Check for overlap with existing platforms
+            // Otsi kattuvust
             overlap = this.physics.overlap(platform, platforms);
             if (overlap) {
-                platform.destroy(); // Destroy the platform if it overlaps
+                platform.destroy(); // Hävita platvorm, kui genereerib kattuvusega
             }
         } while (overlap);
     }
@@ -64,28 +84,28 @@ function create() {
         let x, y, platform, overlap;
         do {
             x = Phaser.Math.Between(0, 400);
-            y = Phaser.Math.Between(100, 400);
+            y = Phaser.Math.Between(100, 400); // Vahemikus Y(100, 400) ehk ülemused platvormid
             platform = platforms.create(x, y, 'platform').setScale(0.2).refreshBody();
             platform.body.setSize(platform.displayWidth * 0.2, platform.displayHeight * 0.2);
             platform.body.setOffset((platform.displayWidth - platform.body.width) / 2, (platform.displayHeight - platform.body.height) / 2);
 
-            // Check for overlap with existing platforms
+            // Otsi kattuvust
             overlap = this.physics.overlap(platform, platforms);
             if (overlap) {
-                platform.destroy(); // Destroy the platform if it overlaps
+                platform.destroy(); // Hävita platvorm, kui genereerib kattuvusega
             }
         } while (overlap);
     }
 
     const bottomGround = platforms.create(400, this.sys.game.config.height, 'ground').setScale(1.5, 0.2).refreshBody();
-    bottomGround.y -= bottomGround.displayHeight / 2; // Adjust position to be at the bottom
+    bottomGround.y -= bottomGround.displayHeight / 2; 
 
     player = this.physics.add.sprite(200, bottomGround.y - 40, 'cat');
-    player.setScale(0.1); // Scale down the cat sprite
+    player.setScale(0.1); // Muuda player suurusele 0.1
     player.setCollideWorldBounds(true);
 
     this.physics.add.collider(player, platforms, (player, platform) => {
-        // Exclude bottom ground from custom collision logic
+        // Alumine põhi ei ole osa platvormi collider loogikast
         if (platform === bottomGround) {
             return;
         }
@@ -102,13 +122,13 @@ function create() {
 
 function checkCollision(player, platform) {  
     if (player.body.bottom < platform.body.bottom) {
-        // Enable collision if the player is above the platform
+        // Lülita hitboxid sisse, kui player on kõrgemal platvormist
         platform.body.checkCollision.up = true;
         platform.body.checkCollision.down = true;
         platform.body.checkCollision.right = true;
         platform.body.checkCollision.left = true;
     } else {
-        // Disable collision if the player is below the platform
+        // Lülita hitboxid välja
         platform.body.checkCollision.up = false;
         platform.body.checkCollision.down = false;
         platform.body.checkCollision.right = false;
@@ -117,7 +137,32 @@ function checkCollision(player, platform) {
 }
 
 function resetGame() {
+    playerTouchingBottom = true;
     this.scene.restart();
+}
+
+function setCookie(name, value, days) {
+    const d = new Date();
+    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + d.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+function clearHighScore() {
+    setCookie('high_score', '', -1);
+    high_score = 0;
+    document.getElementById('high_score').innerText = high_score;
 }
 
 function update() {
@@ -156,6 +201,21 @@ function update() {
 
     if (player.y <= 40) {
         score += 1;
+        document.getElementById('score').innerText = score;
+        resetGame.call(this);
+    }
+
+    if (player.y <= 700 && player.body.touching.down) {
+        playerTouchingBottom = false;
+    }
+
+    if (player.y >= 710 && !playerTouchingBottom && player.body.touching.down) {
+        if (score > high_score) {
+            high_score = score;
+            document.getElementById('high_score').innerText = high_score;
+            setCookie('high_score', high_score, 365);
+        }
+        score = 0;
         document.getElementById('score').innerText = score;
         resetGame.call(this);
     }
