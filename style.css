@@ -5,7 +5,10 @@ body {
     align-items: center;
     height: 100vh;
     background-color: #f0f0f0;
-}
+    background-image: url(assetid/catjump.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 
 #score-container {
     position: absolute;
