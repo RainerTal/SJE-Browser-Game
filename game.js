@@ -28,9 +28,12 @@ let wad;
 let score = 0;
 let scoreText;
 let playerTouchingBottom = true;
-let high_score = getCookie('high_score') ? parseInt(getCookie('high_score')) : 0;
+//let high_score = parseInt(getCookie('high_score'), 10) || 0;
 let platvormid = 8;
-
+const highScore = getCookie('high_score');
+    if (highScore) {
+        document.getElementById('high_score').innerText = highScore; // Näitab high scorei
+    }
 // document.addEventListener('DOMContentLoaded', () => {
 //     highScore = getCookie('high_score') ? parseInt(getCookie('high_score')) : 0;
 //     document.getElementById('high_score').innerText = highScore;
@@ -45,7 +48,9 @@ function preload() {
     this.load.image('sky', 'assetid/sky.png');
     this.load.image('platform', 'assetid/platform.png');
     this.load.image('cat', 'assetid/cat.png');
-    this.load.image('ground', 'assetid/ground.png')  
+    this.load.image('ground', 'assetid/ground.png');
+    console.log('Cookie content:', document.cookie);
+    console.log('High score from cookie:', getCookie('high_score')); 
 }
  // Loo mängu keskkond
 function create() {
@@ -154,22 +159,18 @@ function setCookie(name, value, days) {
 
 // Võta high score'i väärtus cookiest
 function getCookie(name) {
-    const nameEQ = name + "=";
-    const ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-    }
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
     return null;
 }
 
 // Funktsioon, et clearida cookie ja high score nupuga
-function clearHighScore() {
-    setCookie('high_score', '', -1);
-    high_score = 0;
-    document.getElementById('high_score').innerText = high_score;
-}
+//function clearHighScore() {
+//    setCookie('high_score', '', -1);
+//    high_score = 0;
+//    document.getElementById('high_score').innerText = high_score;
+//}
 
 // Funkstioon mängu erinevate olude kontrollimiseks
 function update() {
@@ -225,8 +226,7 @@ function update() {
             document.getElementById('high_score').innerText = high_score;
             setCookie('high_score', high_score, 365);
         }
-        score = 0;
         document.getElementById('score').innerText = score;
-        resetGame.call(this);
+        window.location.href = `finish.html?score=${score}`; 
     }
 }
