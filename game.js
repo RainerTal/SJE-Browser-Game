@@ -47,7 +47,7 @@ function preload() {
     this.load.image('cat', 'assetid/cat.png');
     this.load.image('ground', 'assetid/ground.png')  
 }
-
+ // Loo mängu keskkond
 function create() {
     const background = this.add.image(0, 0, 'sky').setOrigin(0, 0);
     background.displayWidth = this.sys.game.config.width;
@@ -55,6 +55,7 @@ function create() {
 
     platforms = this.physics.add.staticGroup();
 
+    // Kui skoor on üle 3 ja üle 10, siis muutub mäng raskemaks, sest vähem platvorme tekib
     if (score > 3) {
         platvormid = 6;
     }
@@ -100,6 +101,7 @@ function create() {
     const bottomGround = platforms.create(400, this.sys.game.config.height, 'ground').setScale(1.5, 0.2).refreshBody();
     bottomGround.y -= bottomGround.displayHeight / 2; 
 
+    // Loo player
     player = this.physics.add.sprite(200, bottomGround.y - 40, 'cat');
     player.setScale(0.1); // Muuda player suurusele 0.1
     player.setCollideWorldBounds(true);
@@ -136,11 +138,13 @@ function checkCollision(player, platform) {
     }
 }
 
+// Restart funktsioon
 function resetGame() {
     playerTouchingBottom = true;
     this.scene.restart();
 }
 
+// Salvesta high score'i väärtus cookiesse
 function setCookie(name, value, days) {
     const d = new Date();
     d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -148,6 +152,7 @@ function setCookie(name, value, days) {
     document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }
 
+// Võta high score'i väärtus cookiest
 function getCookie(name) {
     const nameEQ = name + "=";
     const ca = document.cookie.split(';');
@@ -159,13 +164,16 @@ function getCookie(name) {
     return null;
 }
 
+// Funktsioon, et clearida cookie ja high score nupuga
 function clearHighScore() {
     setCookie('high_score', '', -1);
     high_score = 0;
     document.getElementById('high_score').innerText = high_score;
 }
 
+// Funkstioon mängu erinevate olude kontrollimiseks
 function update() {
+    // Kui toimuvad keypressid
     if (wad.left.isDown) {
         player.setVelocityX(-160);
     } else if (wad.right.isDown) {
@@ -194,11 +202,12 @@ function update() {
         });
     }, null, this);
 
-    // Reset touchingPlatform flag if player is not touching any platform
+    // Kui mängija ei puudu platvormi, siis on touchingPlatform lipp false
     if (!this.physics.overlap(player, platforms)) {
         touchingPlatform = false;
     }
 
+    // +1 score, kui mängija puudub tippu
     if (player.y <= 40) {
         score += 1;
         document.getElementById('score').innerText = score;
@@ -209,6 +218,7 @@ function update() {
         playerTouchingBottom = false;
     }
 
+    // Fail, kui mängija kukub alla peale esimese platvormi puutumist ja seab uue high score'i, kui score oli kõrgem<
     if (player.y >= 710 && !playerTouchingBottom && player.body.touching.down) {
         if (score > high_score) {
             high_score = score;
