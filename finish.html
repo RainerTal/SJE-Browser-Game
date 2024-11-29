@@ -5,19 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cat Jump - Game Over</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="finish.js"></script>
 </head>
 <body>
     <div class="game-over-container">
         <h1>🎉 Palju õnne! 🎉</h1>
         <p>Jõudsid Cat Jumpi lõppu!</p>
         <button onclick="playAgain()">Mängi uuesti?</button>
+        <div id="score-container">
+            Score: <span id="score">0</span>
+        </div>
     </div>
-
-    <script>
-        function playAgain() {
-            // Replace with the URL or function to restart the game
-            window.location.href = 'game.html'; 
-        }
-    </script>
 </body>
 </html>

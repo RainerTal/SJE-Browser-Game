@@ -31,14 +31,14 @@ let playerTouchingBottom = true;
 let high_score = getCookie('high_score') ? parseInt(getCookie('high_score')) : 0;
 let platvormid = 8;
 
-document.addEventListener('DOMContentLoaded', () => {
-    highScore = getCookie('high_score') ? parseInt(getCookie('high_score')) : 0;
-    document.getElementById('high_score').innerText = highScore;
+// document.addEventListener('DOMContentLoaded', () => {
+//     highScore = getCookie('high_score') ? parseInt(getCookie('high_score')) : 0;
+//     document.getElementById('high_score').innerText = highScore;
 
-    document.getElementById('clear-high_score').addEventListener('click', () => {
-        clearHighScore();
-    });
-});
+//     document.getElementById('clear-high_score').addEventListener('click', () => {
+//         clearHighScore();
+//     });
+// });
 
 
 function preload() {
