@@ -19,7 +19,7 @@ body {
 /* Container Styling */
 .game-over-container {
     text-align: center;
-    background-color: #fff8dc;
+    background-color: #fff8dc7a;
     border: 2px solid #ffcc99;
     border-radius: 20px;
     padding: 30px;
@@ -43,7 +43,7 @@ body {
 .game-over-container button {
     font-size: 1.1em;
     color: #fff;
-    background-color: #ff6f61;
+    background-color: #ff6e61;
     border: none;
     padding: 10px 20px;
     border-radius: 10px;
@@ -155,3 +155,9 @@ body {
 	background: #4d7cf4;
 	box-shadow: 0 0 5px #4d7cf4, 0 0 15px #4d7cf4, 0 0 30px #4d7cf4,
 }
+.logo {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	width: 250px;
+  }
