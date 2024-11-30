@@ -1,0 +1,74 @@
+body, html {
+  margin: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url(pildid/sky.avif) center / cover no-repeat fixed;
+}
+
+.start-nupp {
+  width: 300px;
+  cursor: pointer;
+}
+
+.start-nupp:hover {
+  opacity: 0.8;
+}
+
+.logo {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 250px;
+}
+
+.wad-konteiner {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: grid;
+  grid-template-areas: "w a d";
+  grid-template-columns: repeat(3, 100px);
+  gap: 10px;
+}
+
+.klahv {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  cursor: pointer;
+}
+
+.klahv img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vihje {
+  visibility: hidden;
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 7px 10px;
+  border-radius: 10px;
+  font-size: 15px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+.klahv:hover .vihje {
+  visibility: visible;
+  opacity: 1;
+}
+
+.üles { grid-area: w; }
+.vasak { grid-area: a; }
+.parem { grid-area: d; }
