@@ -3,34 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Start ekraan</title>
+  <title>Start Screen</title>
   <link rel="stylesheet" href="start.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="konteiner">
-      
-      <a href="game.html">
-        <img src="pildid/start-nupp.png" alt="nupp" class="start-nupp">
-      </a>
+  <div class="konteiner">
+    <a href="game.html">
+      <img src="pildid/start-nupp.png" alt="nupp" class="start-nupp">
+    </a>
+    <div class="skoor">
+      HIGH SCORE: <span id="skoor">0</span>
     </div>
-    <img src="pildid/cat_jump.png" alt="logo" class="logo">
+  </div>
+  <img src="pildid/cat_jump.png" alt="logo" class="logo">
 
-    <div class="wad-konteiner">
-      <div class="klahv üles">
-        <img src="pildid/W.png" alt="W klahv">
-        <span class="vihje">ÜLES</span>
-      </div>
-
-      <div class="klahv vasak">
-        <img src="pildid/A.png" alt="A klahv">
-        <span class="vihje">VASAKULE</span>
-      </div>
-
-      <div class="klahv parem">
-        <img src="pildid/D.png" alt="D klahv">
-        <span class="vihje">PAREMALE</span>
-      </div>
-
+  <div class="wad-konteiner">
+    <div class="klahv üles">
+      <img src="pildid/W.png" alt="W klahv">
+      <span class="vihje">ÜLES</span>
     </div>
+
+    <div class="klahv vasak">
+      <img src="pildid/A.png" alt="A klahv">
+      <span class="vihje">VASAKULE</span>
+    </div>
+
+    <div class="klahv parem">
+      <img src="pildid/D.png" alt="D klahv">
+      <span class="vihje">PAREMALE</span>
+    </div>
+  </div>
+
+  <script>
+    let high_score = localStorage.getItem("high_score") || 0;
+    document.getElementById("high_score").innerText = high_score;
+  </script>
 </body>
 </html>

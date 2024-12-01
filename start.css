@@ -72,3 +72,24 @@ body, html {
 .üles { grid-area: w; }
 .vasak { grid-area: a; }
 .parem { grid-area: d; }
+
+.skoor {
+  font-family: 'Press Start 2P', sans-serif;
+  font-size: 16px;
+  color: #fff;
+  text-shadow: 1px 1px 0px #000, 2px 2px 0px #000;
+  position: absolute;
+  top: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align:center;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 10px; /
+}
+
+.konteiner {
+  position: relative;
+}
