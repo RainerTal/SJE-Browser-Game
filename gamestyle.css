@@ -17,18 +17,22 @@ body {
     background-repeat: no-repeat;
 }
 
-#score-container {
+.btn-container {
     position: absolute;
     top: 10px;
     right: 10px;
-    font-size: 24px;
-    color: #000;
+}
+.btn-container button {
+    font-size: 1.1em;
+    color: #fff;
+    background-color: #ff6e61;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-#high-score-container {
-    position: absolute;
-    top: 50px;
-    right: 10px;
-    font-size: 24px;
-    color: #000;
+.btn-container button:hover {
+    background-color: #e65c50;
 }

@@ -25,24 +25,10 @@ let platforms;
 let cursors;
 let spacebar;
 let wad;
-let score = 0;
-let scoreText;
+let score = parseInt(localStorage.getItem('score') || 0);
 let playerTouchingBottom = true;
-//let high_score = parseInt(getCookie('high_score'), 10) || 0;
+let high_score = parseInt(localStorage.getItem('high_score') || 0);
 let platvormid = 8;
-const highScore = getCookie('high_score');
-    if (highScore) {
-        document.getElementById('high_score').innerText = highScore; // Näitab high scorei
-    }
-// document.addEventListener('DOMContentLoaded', () => {
-//     highScore = getCookie('high_score') ? parseInt(getCookie('high_score')) : 0;
-//     document.getElementById('high_score').innerText = highScore;
-
-//     document.getElementById('clear-high_score').addEventListener('click', () => {
-//         clearHighScore();
-//     });
-// });
-
 
 function preload() {
     this.load.image('sky', 'assetid/sky.png');
@@ -165,13 +151,6 @@ function getCookie(name) {
     return null;
 }
 
-// Funktsioon, et clearida cookie ja high score nupuga
-//function clearHighScore() {
-//    setCookie('high_score', '', -1);
-//    high_score = 0;
-//    document.getElementById('high_score').innerText = high_score;
-//}
-
 // Funkstioon mängu erinevate olude kontrollimiseks
 function update() {
     // Kui toimuvad keypressid
@@ -210,9 +189,9 @@ function update() {
 
     // +1 score, kui mängija puudub tippu
     if (player.y <= 40) {
-        score += 1;
-        document.getElementById('score').innerText = score;
-        resetGame.call(this);
+        score += 0.5; // See ei makei sensei, aga töötab :D
+        localStorage.setItem('score', score);
+        window.location.href = 'finish.html';
     }
 
     if (player.y <= 700 && player.body.touching.down) {
@@ -223,10 +202,10 @@ function update() {
     if (player.y >= 710 && !playerTouchingBottom && player.body.touching.down) {
         if (score > high_score) {
             high_score = score;
-            document.getElementById('high_score').innerText = high_score;
-            setCookie('high_score', high_score, 365);
+            localStorage.setItem('high_score', high_score)
         }
-        document.getElementById('score').innerText = score;
-        window.location.href = `finish.html?score=${score}`; 
+        score = 0;
+        localStorage.setItem('score', score);
+        window.location.href = 'restart.html'; 
     }
 }
