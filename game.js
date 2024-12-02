@@ -34,9 +34,7 @@ function preload() {
     this.load.image('sky', 'assetid/sky.png');
     this.load.image('platform', 'assetid/platform.png');
     this.load.image('cat', 'assetid/cat.png');
-    this.load.image('ground', 'assetid/ground.png');
-    console.log('Cookie content:', document.cookie);
-    console.log('High score from cookie:', getCookie('high_score')); 
+    this.load.image('ground', 'assetid/ground.png'); 
 }
  // Loo mängu keskkond
 function create() {
