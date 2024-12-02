@@ -13,7 +13,7 @@
       <img src="pildid/start-nupp.png" alt="nupp" class="start-nupp">
     </a>
     <div class="skoor">
-      HIGH SCORE: <span id="skoor">0</span>
+      HIGH SCORE: <span id="high_score">0</span>
     </div>
   </div>
   <img src="pildid/cat_jump.png" alt="logo" class="logo">
@@ -37,6 +37,7 @@
 
   <script>
     let high_score = localStorage.getItem("high_score") || 0;
+
     document.getElementById("high_score").innerText = high_score;
   </script>
 </body>
