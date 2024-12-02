@@ -30,6 +30,7 @@ let playerTouchingBottom = true;
 let high_score = parseInt(localStorage.getItem('high_score') || 0);
 let platvormid = 8;
 
+// Lae assetid
 function preload() {
     this.load.image('sky', 'assetid/sky.png');
     this.load.image('platform', 'assetid/platform.png');
@@ -133,22 +134,6 @@ function resetGame() {
     this.scene.restart();
 }
 
-// Salvesta high score'i väärtus cookiesse
-function setCookie(name, value, days) {
-    const d = new Date();
-    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
-    const expires = "expires=" + d.toUTCString();
-    document.cookie = name + "=" + value + ";" + expires + ";path=/";
-}
-
-// Võta high score'i väärtus cookiest
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
-}
-
 // Funkstioon mängu erinevate olude kontrollimiseks
 function update() {
     // Kui toimuvad keypressid
@@ -165,7 +150,7 @@ function update() {
         player.setVelocityY(-450);
     }
 
-
+    // Loop, mis käivitab funktsiooni checkCollision() vastavalt playeri positsioonile, va. alumine pind
     platforms.children.iterate(function (platform, bottomGround) {
         if (platform !== bottomGround) {
             checkCollision(player, platform);
@@ -192,6 +177,7 @@ function update() {
         window.location.href = 'finish.html';
     }
 
+    // Lipp, et vaadata, kas player on lahkunud alumiselt platvormilt
     if (player.y <= 700 && player.body.touching.down) {
         playerTouchingBottom = false;
     }
